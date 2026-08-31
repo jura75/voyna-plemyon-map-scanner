@@ -19,19 +19,19 @@
 
         var html = `
         <div id="custom-map-scanner" style="position: fixed; top: 100px; left: 100px; width: 920px; height: 580px; background: #f4e4bc; border: 3px solid #7d510f; z-index: 99999; box-shadow: 0 0 15px rgba(0,0,0,0.5); font-family: Verdana, Arial; display: flex; flex-direction: column;">
-            <div id="scanner-header" style="background: #7d510f; color: #fff; padding: 8px; font-weight: bold; cursor: move; display: flex; justify-content: space-between; align-items: center;">
+            <div id="scanner-header" style="background: #7d510f; color: #fff; padding: 8px; font-weight: bold; cursor: move; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
                 <span>Сканер карты v2.0 (Расширенный)</span>
                 <button id="scanner-close" style="background: #c00; color: #fff; border: none; font-weight: bold; cursor: pointer; padding: 2px 6px;">X</button>
             </div>
             
-            <div style="display: flex; background: #dcc293; border-bottom: 2px solid #7d510f;">
+            <div style="display: flex; background: #dcc293; border-bottom: 2px solid #7d510f; flex-shrink: 0;">
                 <button id="tab-btn-scanner" style="flex: 1; padding: 6px; background: #f4e4bc; border: none; font-weight: bold; cursor: pointer; border-right: 1px solid #bc9a63;">Сканер карты</button>
                 <button id="tab-btn-history" style="flex: 1; padding: 6px; background: #dcc293; border: none; font-weight: bold; cursor: pointer; color: #555;">Сохраненные данные (<span id="history-badge">0</span>)</button>
             </div>
 
             <!-- Вкладка 1: Сканер -->
-            <div id="tab-content-scanner" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
-                <div style="padding: 8px 10px; display: flex; gap: 6px; background: #e8d3a2; border-bottom: 1px solid #bc9a63; align-items: center; flex-wrap: wrap;">
+            <div id="tab-content-scanner" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; min-height: 0;">
+                <div style="padding: 8px 10px; display: flex; gap: 6px; background: #e8d3a2; border-bottom: 1px solid #bc9a63; align-items: center; flex-wrap: wrap; flex-shrink: 0;">
                     <label style="font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 4px;">
                         Рамка:
                         <select id="scanner-size-select" style="padding: 3px;">
@@ -67,7 +67,7 @@
                         <span id="scanner-count" style="font-size: 11px; font-weight: bold; margin-left: auto;">Найдено: 0</span>
                     </div>
                 </div>
-                <div style="flex: 1; overflow-y: auto; background: #fff; padding: 5px;">
+                <div style="flex: 1; overflow-y: auto; background: #fff; padding: 5px; min-height: 0;">
                     <table id="scanner-table" style="width: 100%; border-collapse: collapse; font-size: 11px;">
                         <thead>
                             <tr style="background: #e8d3a2; border-bottom: 1px solid #7d510f; text-align: left; position: sticky; top: 0; z-index: 2;">
@@ -85,14 +85,14 @@
                 </div>
             </div>
 
-            <!-- Вкладка 2: Сохраненные данные -->
-            <div id="tab-content-history" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
-                <div style="padding: 10px; display: flex; gap: 6px; background: #e8d3a2; border-bottom: 1px solid #bc9a63; align-items: center;">
-                    <button id="history-btn-clear" style="background: #a94442; color: #fff; border: 1px solid #6b2624; padding: 5px 10px; font-weight: bold; cursor: pointer;">Очистить архив</button>
-                    <button id="history-btn-copy-all" style="background: #5b3511; color: #fff; border: 1px solid #3c2007; padding: 5px 10px; font-weight: bold; cursor: pointer;">Копировать все коорд.</button>
+            <!-- Вкладка 2: Сохраненные данные (с рабочим вертикальным скроллом) -->
+            <div id="tab-content-history" style="display: none; flex-direction: column; flex: 1; overflow: hidden; min-height: 0;">
+                <div style="padding: 8px 10px; display: flex; gap: 6px; background: #e8d3a2; border-bottom: 1px solid #bc9a63; align-items: center; flex-shrink: 0;">
+                    <button id="history-btn-clear" style="background: #a94442; color: #fff; border: 1px solid #6b2624; padding: 4px 8px; font-weight: bold; cursor: pointer; font-size: 11px;">Очистить архив</button>
+                    <button id="history-btn-copy-all" style="background: #5b3511; color: #fff; border: 1px solid #3c2007; padding: 4px 8px; font-weight: bold; cursor: pointer; font-size: 11px;">Копировать все коорд.</button>
                     <span id="history-count" style="font-size: 11px; font-weight: bold;">Сохранено записей: 0</span>
                 </div>
-                <div style="flex: 1; overflow-y: auto; background: #fff; padding: 5px;">
+                <div style="flex: 1; overflow-y: auto; background: #fff; padding: 5px; min-height: 0;">
                     <table id="history-table" style="width: 100%; border-collapse: collapse; font-size: 11px;">
                         <thead>
                             <tr style="background: #e8d3a2; border-bottom: 1px solid #7d510f; text-align: left; position: sticky; top: 0; z-index: 2;">
@@ -116,7 +116,7 @@
         }
 
         $('#tab-btn-scanner').on('click', function() {
-            $('#tab-content-scanner').show();
+            $('#tab-content-scanner').css('display', 'flex');
             $('#tab-content-history').hide();
             $(this).css({ 'background': '#f4e4bc', 'color': '#000' });
             $('#tab-btn-history').css({ 'background': '#dcc293', 'color': '#555' });
@@ -124,7 +124,7 @@
 
         $('#tab-btn-history').on('click', function() {
             $('#tab-content-scanner').hide();
-            $('#tab-content-history').show();
+            $('#tab-content-history').css('display', 'flex');
             $(this).css({ 'background': '#f4e4bc', 'color': '#000' });
             $('#tab-btn-scanner').css({ 'background': '#dcc293', 'color': '#555' });
             renderHistoryTable();
@@ -294,7 +294,6 @@
             let rowsHtml = [];
             for (let i = 0; i < data.length; i++) {
                 let item = data[i];
-                rowsHtml.append ? null : null;
                 rowsHtml.push(
                     '<tr class="scanner-row" data-x="' + item.x + '" data-y="' + item.y + '" style="border-bottom: 1px solid #eee; cursor: pointer;">' +
                         '<td style="padding: 4px; border: 1px solid #eee; font-weight: bold;">' + item.coords + '</td>' +
@@ -308,14 +307,8 @@
             tbody.html(rowsHtml.join(''));
         }
 
-        // Подсветка на карте при наведении
         $('#scanner-table').off('mouseenter mouseleave', '.scanner-row').on('mouseenter', '.scanner-row', function() {
             $(this).css('background', '#faedc8');
-            let x = parseInt($(this).attr('data-x'));
-            let y = parseInt($(this).attr('data-y'));
-            if (typeof TWMap !== 'undefined' && TWMap.map && typeof TWMap.map.focus === 'function') {
-                // Опционально можно подсветить через TWMap если поддерживается
-            }
         }).on('mouseleave', '.scanner-row', function() {
             $(this).css('background', 'transparent');
         });
@@ -393,7 +386,6 @@
             });
         });
 
-        // Экспорт в CSV
         $('#scanner-export-csv').off('click').on('click', function() {
             let targetList = window._mapCurrentFiltered && window._mapCurrentFiltered.length > 0 ? window._mapCurrentFiltered : window._mapScannerData;
             if (!targetList || targetList.length === 0) {
@@ -536,7 +528,7 @@
                 alert('Архив пуст!');
                 return;
             }
-            let allText = window._mapScannerSavedHistory.map(h => h.text).join(' ');
+            let allText = window._mapScannerSavedHistory.name ? '' : window._mapScannerSavedHistory.map(h => h.text).join(' ');
             navigator.clipboard.writeText(allText).then(function() {
                 if (typeof UI !== 'undefined' && UI.InfoMessage) {
                     UI.InfoMessage('Все координаты архива скопированы!', 3000, 'success');
